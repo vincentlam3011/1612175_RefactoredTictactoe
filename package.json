@@ -10,18 +10,11 @@
     "reactstrap": "^8.0.1"
   },
   "scripts": {
-    "precommit": "NODE_ENV=production lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint-staged": {
-      "*.{js,jsx}": [
-        "pretty-quick --staged",
-        "eslint src/ --fix",
-        "git add"
-      ]
-    }
+    "precommit": "NODE_ENV=production lint-staged"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -50,5 +43,17 @@
     "lint-staged": "^9.4.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "pretty-quick --staged",
+      "eslint src/ --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
