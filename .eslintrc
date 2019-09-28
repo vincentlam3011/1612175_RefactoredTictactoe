@@ -23,7 +23,13 @@
             "error",
             "absolute-first"
         ],
-        "import/newline-after-import": "error"
+        "import/newline-after-import": "error",
+        "max-classes-per-file": ["error", 3],
+        "react/destructuring-assignment": 0,
+        "react/no-access-state-in-setstate": 0,
+        "react/no-array-index-key": 0,
+        "no-param-reassign": 0,
+        "no-undef": 0
     },
     "globals": {
         "window": true,
