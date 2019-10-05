@@ -270,67 +270,72 @@ function gameWon(square, squares) {
 }
 
 class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: [
-        {
-          squares: Array(boardSize * boardSize).fill(null),
-          latestMoveSqr: null
-        }
-      ],
-      isXNext: true,
-      stepNum: 0,
-      isAsc: true
-    };
-  }
+  //   constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //       history: [
+  //         {
+  //           squares: Array(boardSize * boardSize).fill(null),
+  //           latestMoveSqr: null
+  //         }
+  //       ],
+  //       isXNext: true,
+  //       stepNum: 0,
+  //       isAsc: true
+  //     };
+  //   }
 
-  handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNum + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
-    if (squares[i]) return;
-    if (gameOver) return;
-    squares[i] = this.state.isXNext ? 'X' : 'O';
+  //   handleClick(i) {
+  //     const history = this.state.history.slice(0, this.state.stepNum + 1);
+  //     const current = history[history.length - 1];
+  //     const squares = current.squares.slice();
+  //     if (squares[i]) return;
+  //     if (gameOver) return;
+  //     squares[i] = this.state.isXNext ? 'X' : 'O';
 
-    this.setState({
-      history: history.concat([{ squares, latestMoveSqr: i }]),
-      isXNext: !this.state.isXNext,
-      stepNum: history.length
-    });
-  }
+  //     this.setState({
+  //       history: history.concat([{ squares, latestMoveSqr: i }]),
+  //       isXNext: !this.state.isXNext,
+  //       stepNum: history.length
+  //     });
+  //   }
 
-  handleSort() {
-    const history = this.state.history.slice(0, this.state.stepNum + 1);
-    if (history.length === 1) return;
-    this.setState({ isAsc: !this.state.isAsc });
-  }
+  //   handleSort() {
+  //     const history = this.state.history.slice(0, this.state.stepNum + 1);
+  //     if (history.length === 1) return;
+  //     this.setState({ isAsc: !this.state.isAsc });
+  //   }
 
-  goTo(step) {
-    if (step !== this.state.history.length) gameOver = false;
-    this.setState({ stepNum: step, isXNext: step % 2 === 0 });
-  }
+  //   goTo(step) {
+  //     if (step !== this.state.history.length) gameOver = false;
+  //     this.setState({ stepNum: step, isXNext: step % 2 === 0 });
+  //   }
 
-  handleRestart() {
-    this.setState({
-      history: [
-        {
-          squares: Array(boardSize * boardSize).fill(null),
-          latestMoveSqr: null
-        }
-      ],
-      isXNext: true,
-      stepNum: 0,
-      isAsc: true
-    });
-    gameOver = false;
-  }
+  //   handleRestart() {
+  //     this.setState({
+  //       history: [
+  //         {
+  //           squares: Array(boardSize * boardSize).fill(null),
+  //           latestMoveSqr: null
+  //         }
+  //       ],
+  //       isXNext: true,
+  //       stepNum: 0,
+  //       isAsc: true
+  //     });
+  //     gameOver = false;
+  //   }
 
   render() {
-    const { isAsc } = this.state;
-    const { history } = this.state;
-    const current = history[this.state.stepNum];
+    // const { isAsc } = this.state;
+    // const { history } = this.state;
+    // const current = history[this.state.stepNum];
+    // const winner = gameWon(current.latestMoveSqr, current.squares);
+
+    const { history } = this.props;
+    const current = history[this.props.stepNum];
     const winner = gameWon(current.latestMoveSqr, current.squares);
+    const { isAsc } = this.props;
 
     const moves = history.map((step, move) => {
       const row = Math.floor(step.latestMoveSqr / boardSize);
@@ -342,10 +347,10 @@ class Game extends React.Component {
         <Button
           key={move}
           className={
-            move === this.state.stepNum ? 'move-list-item-selected' : ''
+            move === this.props.stepNum ? 'move-list-item-selected' : ''
           }
           onClick={() => {
-            this.goTo(move);
+            this.props.goTo(move);
           }}
           outline
           color="primary"
@@ -356,7 +361,7 @@ class Game extends React.Component {
     });
 
     const restartBtn = (
-      <Button color="primary" onClick={() => this.handleRestart()}>
+      <Button color="primary" onClick={() => this.props.restart()}>
         Restart game
       </Button>
     );
@@ -375,7 +380,7 @@ class Game extends React.Component {
             Winner: {winner}
           </Badge>
         );
-        gameOver = true;
+        if (!gameOver) gameOver = true;
         statusAlert = (
           <UncontrolledAlert color="success">
             The winner is player {winner}!
@@ -384,7 +389,7 @@ class Game extends React.Component {
       } else {
         status = (
           <Badge className="status-badge" color="primary">
-            Next player: {this.state.isXNext ? 'X' : 'O'}
+            Next player: {this.props.isXNext ? 'X' : 'O'}
           </Badge>
         );
       }
@@ -404,7 +409,10 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={i => this.handleClick(i)} />
+          <Board
+            squares={current.squares}
+            onSqrClick={i => this.props.onSqrClick(i)}
+          />
         </div>
         <div className="game-info">
           <div>{status}</div>
@@ -414,7 +422,7 @@ class Game extends React.Component {
           <br />
           <div>
             {' '}
-            <Button color="success" onClick={() => this.handleSort()}>
+            <Button color="success" onClick={() => this.props.sort()}>
               Sort {isAsc ? 'descending' : 'ascending'}
             </Button>
           </div>
