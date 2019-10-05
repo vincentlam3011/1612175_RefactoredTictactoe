@@ -5,7 +5,6 @@ import { Button, ButtonGroup, Badge, UncontrolledAlert } from 'reactstrap';
 import '../index.css';
 import Board from './board';
 
-let gameOver = false;
 const boardSize = 20;
 
 function isCleared(arr, val) {
@@ -242,7 +241,7 @@ function checkDiagonallyTopRightBottomLeft(square, squares) {
   return null;
 }
 
-function gameWon(square, squares) {
+export function gameWon(square, squares) {
   const vertically = checkVertically(square, squares);
   const horizontally = checkHorizontally(square, squares);
   const diagonallyTopLeftBottomRight = checkDiagonallyTopLeftBottomRight(
@@ -270,68 +269,7 @@ function gameWon(square, squares) {
 }
 
 class Game extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-  //     this.state = {
-  //       history: [
-  //         {
-  //           squares: Array(boardSize * boardSize).fill(null),
-  //           latestMoveSqr: null
-  //         }
-  //       ],
-  //       isXNext: true,
-  //       stepNum: 0,
-  //       isAsc: true
-  //     };
-  //   }
-
-  //   handleClick(i) {
-  //     const history = this.state.history.slice(0, this.state.stepNum + 1);
-  //     const current = history[history.length - 1];
-  //     const squares = current.squares.slice();
-  //     if (squares[i]) return;
-  //     if (gameOver) return;
-  //     squares[i] = this.state.isXNext ? 'X' : 'O';
-
-  //     this.setState({
-  //       history: history.concat([{ squares, latestMoveSqr: i }]),
-  //       isXNext: !this.state.isXNext,
-  //       stepNum: history.length
-  //     });
-  //   }
-
-  //   handleSort() {
-  //     const history = this.state.history.slice(0, this.state.stepNum + 1);
-  //     if (history.length === 1) return;
-  //     this.setState({ isAsc: !this.state.isAsc });
-  //   }
-
-  //   goTo(step) {
-  //     if (step !== this.state.history.length) gameOver = false;
-  //     this.setState({ stepNum: step, isXNext: step % 2 === 0 });
-  //   }
-
-  //   handleRestart() {
-  //     this.setState({
-  //       history: [
-  //         {
-  //           squares: Array(boardSize * boardSize).fill(null),
-  //           latestMoveSqr: null
-  //         }
-  //       ],
-  //       isXNext: true,
-  //       stepNum: 0,
-  //       isAsc: true
-  //     });
-  //     gameOver = false;
-  //   }
-
   render() {
-    // const { isAsc } = this.state;
-    // const { history } = this.state;
-    // const current = history[this.state.stepNum];
-    // const winner = gameWon(current.latestMoveSqr, current.squares);
-
     const { history } = this.props;
     const current = history[this.props.stepNum];
     const winner = gameWon(current.latestMoveSqr, current.squares);
@@ -380,7 +318,6 @@ class Game extends React.Component {
             Winner: {winner}
           </Badge>
         );
-        if (!gameOver) gameOver = true;
         statusAlert = (
           <UncontrolledAlert color="success">
             The winner is player {winner}!
