@@ -1,2 +1,3 @@
 # tictactoe
- Refactored w/ husky, airbnb, eslint, prettier
+ Refactored w/ husky, airbnb, eslint, prettier, redux
+
